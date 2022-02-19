@@ -39,6 +39,7 @@ function PAequorFactory(specimenNum,dna){
             console.log("same: " + same);
             let percentage = same / 15; 
             console.log(`specimen #${this.specimenNum} and specimen #${pAequor.specimenNum} have ${percentage} DNA in common` );
+            return percentage;
           },
           willLikelySurvive(){
             let CG = 0;
@@ -49,6 +50,18 @@ function PAequorFactory(specimenNum,dna){
             }
             let CGPossibility = CG / 15;
             return (CGPossibility > 0.6);
+          },
+          complementStrand(){
+            let complement = this.dna;
+            complement = complement.map(x => {
+             switch(x){
+               case 'A': return 'T';
+               case 'T': return 'A';
+               case 'C' : return 'G';
+               case 'G' : return 'C';
+               default : return x;
+             }});
+            return complement;
           }
         };  
 }
@@ -58,7 +71,7 @@ let pAequpr = randomStrand.dna;
 console.log(pAequpr); 
 console.log(randomStrand.compareDNA(PAequorFactory(2,mockUpStrand())));
 console.log(randomStrand.willLikelySurvive());
-
+console.log(randomStrand.complementStrand());
 
 //create 30 instances
 let pAequors = [];
@@ -70,5 +83,23 @@ for (let i = 0; i < 31; i++){
   pAequors.push(randomStrand);
 }
 
-console.log(pAequors);
+//test 30 instances output
+//console.log(pAequors);
+let dna1 = [];
+let dna2 = [];
+let possibility = 0;
+for(let i = 0; i < 31;i++){
+  for(let j = i + 1; j < 31; j++){
+    let survival = pAequors[i].compareDNA(pAequors[j]);
+    if (survival > possibility){
+      possibility = survival;
+      dna1 = pAequors[i];
+      dna2 = pAequors[j];
+    }
+  }
+  let array = [];
+  array.push(dna1);
+  array.push(dna2);
+  console.log(array + ':' + possibility);
+}
 
